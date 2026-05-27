@@ -6,15 +6,20 @@
     "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
     "@prisma/client": "^7.8.0",
+    "@supabase/supabase-js": "^2.48.1",
+    "dotenv": "^16.4.7",
+    "lucide-react": "^0.474.0",
     "next": "16.2.6",
     "prisma": "^7.8.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "recharts": "^2.15.1",
     "sonner": "^2.0.7"
   },
   "devDependencies": {
