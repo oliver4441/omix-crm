@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase"
 import { useParams } from "next/navigation"
 import { toast } from "sonner"
@@ -48,13 +48,7 @@ export default function LeadDetailsPage() {
   const [generatedMessage, setGeneratedMessage] =
     useState("")
 
-  useEffect(() => {
-    fetchLead()
-    fetchNotes()
-    fetchActivities()
-  }, [])
-
-  const fetchLead = async () => {
+  const fetchLead = useCallback(async () => {
     const { data } = await supabase
       .from("leads")
       .select("*")
@@ -70,9 +64,9 @@ export default function LeadDetailsPage() {
         )
       }
     }
-  }
+  }, [params.id])
 
-  const fetchNotes = async () => {
+  const fetchNotes = useCallback(async () => {
     const { data } = await supabase
       .from("lead_notes")
       .select("*")
@@ -84,10 +78,10 @@ export default function LeadDetailsPage() {
     if (data) {
       setNotes(data)
     }
-  }
+  }, [params.id])
 
   const fetchActivities =
-    async () => {
+    useCallback(async () => {
       const { data } =
         await supabase
           .from(
@@ -108,7 +102,16 @@ export default function LeadDetailsPage() {
       if (data) {
         setActivities(data)
       }
+    }, [params.id])
+
+  useEffect(() => {
+    const init = async () => {
+      await fetchLead()
+      await fetchNotes()
+      await fetchActivities()
     }
+    init()
+  }, [fetchLead, fetchNotes, fetchActivities])
 
   const addNote = async () => {
     if (!newNote) return

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
 
 import { supabase } from "@/lib/supabase"
@@ -25,11 +25,7 @@ export default function LeadsPage() {
   const [loading, setLoading] =
     useState(true)
 
-  useEffect(() => {
-    fetchLeads()
-  }, [])
-
-  const fetchLeads = async () => {
+  const fetchLeads = useCallback(async () => {
     setLoading(true)
 
     const {
@@ -58,7 +54,14 @@ export default function LeadsPage() {
     }
 
     setLoading(false)
-  }
+  }, [])
+
+  useEffect(() => {
+    const init = async () => {
+      await fetchLeads()
+    }
+    init()
+  }, [fetchLeads])
 
   const updateStatus = async (
     id: string,

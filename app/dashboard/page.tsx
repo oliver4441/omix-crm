@@ -26,42 +26,42 @@ export default function DashboardPage() {
     useState<Lead[]>([])
 
   useEffect(() => {
+    const fetchLeads = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (!user) return
+
+      const { data, error } = await supabase
+        .from("leads")
+        .select("*")
+        .eq("user_id", user.id)
+
+      if (!error && data) {
+        const overdue = data.filter(
+          (lead) =>
+            lead.follow_up_at &&
+            new Date(
+              lead.follow_up_at
+            ) < new Date()
+        )
+
+        for (const lead of overdue) {
+          await createNotification(
+            "Overdue Follow-Up",
+            `${lead.status} lead requires attention`,
+            "overdue_followup",
+            lead.id
+          )
+        }
+
+        setLeads(data)
+      }
+    }
+
     fetchLeads()
   }, [])
-
-  const fetchLeads = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) return
-
-    const { data, error } = await supabase
-      .from("leads")
-      .select("*")
-      .eq("user_id", user.id)
-
-    if (!error && data) {
-      const overdue = data.filter(
-        (lead) =>
-          lead.follow_up_at &&
-          new Date(
-            lead.follow_up_at
-          ) < new Date()
-      )
-
-      for (const lead of overdue) {
-        await createNotification(
-          "Overdue Follow-Up",
-          `${lead.status} lead requires attention`,
-          "overdue_followup",
-          lead.id
-        )
-      }
-
-      setLeads(data)
-    }
-  }
 
   const totalLeads =
     leads.length

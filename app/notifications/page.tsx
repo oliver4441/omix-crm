@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import { supabase } from "@/lib/supabase"
 
@@ -16,12 +16,8 @@ export default function NotificationsPage() {
   const [notifications, setNotifications] =
     useState<Notification[]>([])
 
-  useEffect(() => {
-    fetchNotifications()
-  }, [])
-
   const fetchNotifications =
-    async () => {
+    useCallback(async () => {
       const {
         data: { user },
       } =
@@ -47,7 +43,14 @@ export default function NotificationsPage() {
       if (data) {
         setNotifications(data)
       }
+    }, [])
+
+  useEffect(() => {
+    const init = async () => {
+      await fetchNotifications()
     }
+    init()
+  }, [fetchNotifications])
 
   const markAsRead =
     async (id: string) => {

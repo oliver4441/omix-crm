@@ -32,33 +32,36 @@ export default function PipelinePage() {
     useState<Lead[]>([])
 
   useEffect(() => {
+    const fetchLeads = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (!user) return
+
+      const { data, error } = await supabase
+        .from("leads")
+        .select("*")
+        .eq("user_id", user.id)
+
+      if (error) {
+        toast.error(error.message)
+        return
+      }
+
+      if (data) {
+        setLeads(data)
+      }
+    }
+
     fetchLeads()
   }, [])
 
-  const fetchLeads = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) return
-
-    const { data, error } = await supabase
-      .from("leads")
-      .select("*")
-      .eq("user_id", user.id)
-
-    if (error) {
-      toast.error(error.message)
-      return
-    }
-
-    if (data) {
-      setLeads(data)
-    }
-  }
-
   const onDragEnd = async (
-    result: any
+    result: {
+      destination: { droppableId: string } | null
+      draggableId: string
+    }
   ) => {
     if (!result.destination) return
 
