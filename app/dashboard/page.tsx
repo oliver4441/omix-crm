@@ -1,7 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
-
 import {
   BarChart,
   Bar,
@@ -11,208 +9,226 @@ import {
   ResponsiveContainer,
 } from "recharts"
 
+import {
+  Users,
+  CheckCircle,
+  XCircle,
+  ClipboardList,
+} from "lucide-react"
+
+import { useEffect, useState } from "react"
+
 import { supabase } from "@/lib/supabase"
 
-import { createNotification } from "@/lib/notifications"
-
-type Lead = {
-  id: string
-  status: string
-  follow_up_at: string | null
-}
-
 export default function DashboardPage() {
-  const [leads, setLeads] =
-    useState<Lead[]>([])
+  const [stats, setStats] =
+    useState({
+      totalLeads: 0,
+      wonDeals: 0,
+      lostDeals: 0,
+      tasks: 0,
+    })
 
-  useEffect(() => {
-    const fetchLeads = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
+  const [chartData, setChartData] =
+    useState<any[]>([])
 
-      if (!user) return
-
-      const { data, error } = await supabase
+  const fetchDashboard = async () => {
+    const { data: leads } =
+      await supabase
         .from("leads")
         .select("*")
-        .eq("user_id", user.id)
 
-      if (!error && data) {
-        const overdue = data.filter(
-          (lead) =>
-            lead.follow_up_at &&
-            new Date(
-              lead.follow_up_at
-            ) < new Date()
-        )
+    const { data: tasks } =
+      await supabase
+        .from("tasks")
+        .select("*")
 
-        for (const lead of overdue) {
-          await createNotification(
-            "Overdue Follow-Up",
-            `${lead.status} lead requires attention`,
-            "overdue_followup",
-            lead.id
-          )
-        }
+    const totalLeads =
+      leads?.length || 0
 
-        setLeads(data)
-      }
-    }
+    const wonDeals =
+      leads?.filter(
+        (lead) =>
+          lead.status === "Won"
+      ).length || 0
 
-    fetchLeads()
+    const lostDeals =
+      leads?.filter(
+        (lead) =>
+          lead.status === "Lost"
+      ).length || 0
+
+    setStats({
+      totalLeads,
+      wonDeals,
+      lostDeals,
+      tasks: tasks?.length || 0,
+    })
+
+    const grouped = [
+      {
+        name: "New",
+        value:
+          leads?.filter(
+            (l) =>
+              l.status === "New"
+          ).length || 0,
+      },
+      {
+        name: "Contacted",
+        value:
+          leads?.filter(
+            (l) =>
+              l.status ===
+              "Contacted"
+          ).length || 0,
+      },
+      {
+        name: "Qualified",
+        value:
+          leads?.filter(
+            (l) =>
+              l.status ===
+              "Qualified"
+          ).length || 0,
+      },
+      {
+        name: "Proposal",
+        value:
+          leads?.filter(
+            (l) =>
+              l.status ===
+              "Proposal"
+          ).length || 0,
+      },
+      {
+        name: "Won",
+        value:
+          leads?.filter(
+            (l) =>
+              l.status === "Won"
+          ).length || 0,
+      },
+      {
+        name: "Lost",
+        value:
+          leads?.filter(
+            (l) =>
+              l.status === "Lost"
+          ).length || 0,
+      },
+    ]
+
+    setChartData(grouped)
+  }
+
+  useEffect(() => {
+    fetchDashboard()
   }, [])
 
-  const totalLeads =
-    leads.length
-
-  const wonDeals =
-    leads.filter(
-      (lead) =>
-        lead.status === "Won"
-    ).length
-
-  const overdueFollowUps =
-    leads.filter(
-      (lead) =>
-        lead.follow_up_at &&
-        new Date(
-          lead.follow_up_at
-        ) < new Date()
-    ).length
-
   const conversionRate =
-    totalLeads > 0
+    stats.totalLeads > 0
       ? (
-          (wonDeals /
-            totalLeads) *
+          (stats.wonDeals /
+            stats.totalLeads) *
           100
         ).toFixed(1)
       : 0
 
-  const pipelineData = [
-    {
-      name: "New",
-      total: leads.filter(
-        (lead) =>
-          lead.status === "New"
-      ).length,
-    },
-    {
-      name: "Contacted",
-      total: leads.filter(
-        (lead) =>
-          lead.status ===
-          "Contacted"
-      ).length,
-    },
-    {
-      name: "Qualified",
-      total: leads.filter(
-        (lead) =>
-          lead.status ===
-          "Qualified"
-      ).length,
-    },
-    {
-      name: "Proposal",
-      total: leads.filter(
-        (lead) =>
-          lead.status ===
-          "Proposal"
-      ).length,
-    },
-    {
-      name: "Won",
-      total: leads.filter(
-        (lead) =>
-          lead.status === "Won"
-      ).length,
-    },
-  ]
-
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-4xl font-bold">
-          CRM Analytics
+    <div className="min-h-screen bg-black p-6 text-white">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">
+          Dashboard
         </h1>
 
         <p className="mt-2 text-zinc-400">
-          Sales performance overview.
+          CRM performance overview
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-4">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-          <p className="text-zinc-400">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <Users size={24} />
+
+            <span className="text-3xl font-bold">
+              {stats.totalLeads}
+            </span>
+          </div>
+
+          <p className="mt-4 text-zinc-400">
             Total Leads
           </p>
-
-          <h2 className="mt-4 text-4xl font-bold">
-            {totalLeads}
-          </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-          <p className="text-zinc-400">
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <CheckCircle size={24} />
+
+            <span className="text-3xl font-bold">
+              {stats.wonDeals}
+            </span>
+          </div>
+
+          <p className="mt-4 text-zinc-400">
             Won Deals
           </p>
-
-          <h2 className="mt-4 text-4xl font-bold">
-            {wonDeals}
-          </h2>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-          <p className="text-zinc-400">
-            Conversion Rate
-          </p>
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <XCircle size={24} />
 
-          <h2 className="mt-4 text-4xl font-bold">
-            {conversionRate}%
-          </h2>
+            <span className="text-3xl font-bold">
+              {stats.lostDeals}
+            </span>
+          </div>
+
+          <p className="mt-4 text-zinc-400">
+            Lost Deals
+          </p>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-          <p className="text-zinc-400">
-            Overdue Follow-Ups
-          </p>
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <ClipboardList size={24} />
 
-          <h2 className="mt-4 text-4xl font-bold text-red-400">
-            {
-              overdueFollowUps
-            }
-          </h2>
+            <span className="text-3xl font-bold">
+              {stats.tasks}
+            </span>
+          </div>
+
+          <p className="mt-4 text-zinc-400">
+            Active Tasks
+          </p>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold">
-            Pipeline Overview
+      <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="text-xl font-semibold">
+            Pipeline Analytics
           </h2>
 
-          <p className="text-zinc-400">
-            Lead distribution by stage.
-          </p>
+          <div className="rounded-full bg-orange-500/20 px-4 py-2 text-sm text-orange-400">
+            {conversionRate}% Conversion
+          </div>
         </div>
 
-        <div className="h-[400px] w-full min-w-0">
+        <div className="h-[400px] min-h-[400px] w-full">
           <ResponsiveContainer
             width="100%"
-            height={400}
+            height="100%"
           >
-            <BarChart
-              data={pipelineData}
-            >
+            <BarChart data={chartData}>
               <XAxis dataKey="name" />
 
               <YAxis />
 
               <Tooltip />
 
-              <Bar dataKey="total" />
+              <Bar dataKey="value" />
             </BarChart>
           </ResponsiveContainer>
         </div>

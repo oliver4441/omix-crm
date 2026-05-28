@@ -1,246 +1,176 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
 import { supabase } from "@/lib/supabase"
 
-import AddLeadForm from "@/components/leads/add-lead-form"
-
-import { toast } from "sonner"
-
-type Lead = {
-  id: string
-  name: string
-  email: string
-  phone: string
-  status: string
-  created_at: string
-}
+const statuses = [
+  "All",
+  "New",
+  "Contacted",
+  "Qualified",
+  "Proposal",
+  "Won",
+  "Lost",
+]
 
 export default function LeadsPage() {
   const [leads, setLeads] =
-    useState<Lead[]>([])
+    useState<any[]>([])
 
-  const [loading, setLoading] =
-    useState(true)
+  const [filteredLeads, setFilteredLeads] =
+    useState<any[]>([])
 
-  const fetchLeads = useCallback(async () => {
-    setLoading(true)
+  const [search, setSearch] =
+    useState("")
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
+  const [status, setStatus] =
+    useState("All")
 
-    if (!user) {
-      setLoading(false)
+  const fetchLeads = async () => {
+    const { data, error } =
+      await supabase
+        .from("leads")
+        .select("*")
+        .order("created_at", {
+          ascending: false,
+        })
+
+    if (error) {
+      console.error(error)
       return
     }
 
-    const { data, error } = await supabase
-      .from("leads")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", {
-        ascending: false,
-      })
+    setLeads(data || [])
+    setFilteredLeads(data || [])
+  }
 
-    if (error) {
-      toast.error(error.message)
-    }
-
-    if (data) {
-      setLeads(data)
-    }
-
-    setLoading(false)
+  useEffect(() => {
+    fetchLeads()
   }, [])
 
   useEffect(() => {
-    const init = async () => {
-      await fetchLeads()
-    }
-    init()
-  }, [fetchLeads])
+    let filtered = [...leads]
 
-  const updateStatus = async (
-    id: string,
-    status: string
-  ) => {
-    const { error } = await supabase
-      .from("leads")
-      .update({ status })
-      .eq("id", id)
-
-    if (error) {
-      toast.error(error.message)
-      return
-    }
-
-    toast.success(
-      "Lead updated"
-    )
-
-    fetchLeads()
-  }
-
-  const deleteLead = async (
-    id: string
-  ) => {
-    const confirmed =
-      confirm(
-        "Delete this lead?"
+    if (search) {
+      filtered = filtered.filter(
+        (lead) =>
+          lead.name
+            ?.toLowerCase()
+            .includes(
+              search.toLowerCase()
+            ) ||
+          lead.company
+            ?.toLowerCase()
+            .includes(
+              search.toLowerCase()
+            ) ||
+          lead.email
+            ?.toLowerCase()
+            .includes(
+              search.toLowerCase()
+            )
       )
-
-    if (!confirmed) return
-
-    const { error } = await supabase
-      .from("leads")
-      .delete()
-      .eq("id", id)
-
-    if (error) {
-      toast.error(error.message)
-      return
     }
 
-    toast.success(
-      "Lead deleted"
-    )
+    if (status !== "All") {
+      filtered = filtered.filter(
+        (lead) =>
+          lead.status === status
+      )
+    }
 
-    fetchLeads()
-  }
+    setFilteredLeads(filtered)
+  }, [search, status, leads])
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-4xl font-bold">
-          Leads
-        </h1>
+    <div className="min-h-screen bg-black p-6 text-white">
+      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">
+            Leads
+          </h1>
 
-        <p className="mt-2 text-zinc-400">
-          Manage your customer pipeline.
-        </p>
+          <p className="mt-2 text-zinc-400">
+            Manage and track your clients
+          </p>
+        </div>
+
+        <Link
+          href="/pipeline"
+          className="rounded-xl bg-orange-500 px-5 py-3 font-medium transition hover:bg-orange-600"
+        >
+          Open Pipeline
+        </Link>
       </div>
 
-      <AddLeadForm
-        refreshLeads={fetchLeads}
-      />
+      <div className="mb-8 grid gap-4 md:grid-cols-2">
+        <input
+          value={search}
+          onChange={(e) =>
+            setSearch(e.target.value)
+          }
+          placeholder="Search leads..."
+          className="rounded-xl border border-white/10 bg-white/5 p-4 outline-none backdrop-blur-xl"
+        />
 
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
-        {loading ? (
-          <div className="text-zinc-400">
-            Loading leads...
-          </div>
-        ) : leads.length === 0 ? (
-          <div className="text-zinc-400">
-            No leads yet.
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-white/10 text-left text-zinc-400">
-                  <th className="pb-4">
-                    Name
-                  </th>
-
-                  <th className="pb-4">
-                    Email
-                  </th>
-
-                  <th className="pb-4">
-                    Phone
-                  </th>
-
-                  <th className="pb-4">
-                    Status
-                  </th>
-
-                  <th className="pb-4">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {leads.map((lead) => (
-                  <tr
-                    key={lead.id}
-                    className="border-b border-white/5"
-                  >
-                    <td className="py-4">
-                      <Link
-                        href={`/leads/${lead.id}`}
-                        className="font-semibold hover:text-orange-400"
-                      >
-                        {lead.name}
-                      </Link>
-                    </td>
-
-                    <td className="py-4 text-zinc-300">
-                      {lead.email}
-                    </td>
-
-                    <td className="py-4 text-zinc-300">
-                      {lead.phone}
-                    </td>
-
-                    <td className="py-4">
-                      <select
-                        value={
-                          lead.status
-                        }
-                        onChange={(e) =>
-                          updateStatus(
-                            lead.id,
-                            e.target
-                              .value
-                          )
-                        }
-                        className="rounded-lg border border-white/10 bg-black/30 px-3 py-2 outline-none"
-                      >
-                        <option>
-                          New
-                        </option>
-
-                        <option>
-                          Contacted
-                        </option>
-
-                        <option>
-                          Qualified
-                        </option>
-
-                        <option>
-                          Proposal
-                        </option>
-
-                        <option>
-                          Won
-                        </option>
-                      </select>
-                    </td>
-
-                    <td className="py-4">
-                      <button
-                        onClick={() =>
-                          deleteLead(
-                            lead.id
-                          )
-                        }
-                        className="rounded-lg bg-red-500/20 px-4 py-2 text-red-400 hover:bg-red-500/30"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <select
+          value={status}
+          onChange={(e) =>
+            setStatus(e.target.value)
+          }
+          className="rounded-xl border border-white/10 bg-white/5 p-4 outline-none backdrop-blur-xl"
+        >
+          {statuses.map((item) => (
+            <option
+              key={item}
+              value={item}
+              className="bg-black"
+            >
+              {item}
+            </option>
+          ))}
+        </select>
       </div>
+
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        {filteredLeads.map((lead) => (
+          <Link
+            href={`/leads/${lead.id}`}
+            key={lead.id}
+            className="rounded-2xl border border-white/10 bg-white/5 p-6 transition hover:border-orange-500 backdrop-blur-xl"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <h2 className="text-xl font-semibold">
+                  {lead.name}
+                </h2>
+
+                <p className="mt-1 text-zinc-400">
+                  {lead.company}
+                </p>
+              </div>
+
+              <span className="rounded-full bg-orange-500/20 px-3 py-1 text-xs text-orange-400">
+                {lead.status || "New"}
+              </span>
+            </div>
+
+            <div className="mt-6 space-y-2 text-sm text-zinc-400">
+              <p>{lead.email}</p>
+
+              <p>{lead.phone}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {filteredLeads.length === 0 && (
+        <div className="mt-20 text-center text-zinc-500">
+          No leads found
+        </div>
+      )}
     </div>
   )
 }

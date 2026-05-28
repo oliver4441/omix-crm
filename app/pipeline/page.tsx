@@ -1,194 +1,198 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import {
   DragDropContext,
   Droppable,
   Draggable,
 } from "@hello-pangea/dnd"
 
-import { useEffect, useState } from "react"
-
 import { supabase } from "@/lib/supabase"
 
-import { toast } from "sonner"
-
-type Lead = {
-  id: string
-  name: string
-  email: string
-  status: string
-}
-
-const columns = [
+const stages = [
   "New",
   "Contacted",
   "Qualified",
   "Proposal",
   "Won",
+  "Lost",
 ]
 
 export default function PipelinePage() {
-  const [leads, setLeads] =
-    useState<Lead[]>([])
+  const [columns, setColumns] =
+    useState<any>({})
 
-  useEffect(() => {
-    const fetchLeads = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-
-      if (!user) return
-
-      const { data, error } = await supabase
+  const fetchLeads = async () => {
+    const { data, error } =
+      await supabase
         .from("leads")
         .select("*")
-        .eq("user_id", user.id)
 
-      if (error) {
-        toast.error(error.message)
-        return
-      }
-
-      if (data) {
-        setLeads(data)
-      }
+    if (error) {
+      console.error(error)
+      return
     }
 
+    const grouped: any = {}
+
+    stages.forEach((stage) => {
+      grouped[stage] = []
+    })
+
+    data.forEach((lead) => {
+      const status =
+        lead.status || "New"
+
+      if (!grouped[status]) {
+        grouped[status] = []
+      }
+
+      grouped[status].push(lead)
+    })
+
+    setColumns(grouped)
+  }
+
+  useEffect(() => {
     fetchLeads()
   }, [])
 
   const onDragEnd = async (
-    result: {
-      destination: { droppableId: string } | null
-      draggableId: string
-    }
+    result: any
   ) => {
-    if (!result.destination) return
+    const { source, destination } =
+      result
 
-    const leadId =
-      result.draggableId
+    if (!destination) return
 
-    const newStatus =
-      result.destination.droppableId
+    const sourceColumn =
+      columns[source.droppableId]
 
-    setLeads((prev) =>
-      prev.map((lead) =>
-        lead.id === leadId
-          ? {
-              ...lead,
-              status: newStatus,
-            }
-          : lead
+    const destColumn =
+      columns[destination.droppableId]
+
+    const sourceItems = [
+      ...sourceColumn,
+    ]
+
+    const destItems = [...destColumn]
+
+    const [removed] =
+      sourceItems.splice(
+        source.index,
+        1
       )
+
+    removed.status =
+      destination.droppableId
+
+    destItems.splice(
+      destination.index,
+      0,
+      removed
     )
 
-    const { error } =
-      await supabase
-        .from("leads")
-        .update({
-          status: newStatus,
-        })
-        .eq("id", leadId)
+    setColumns({
+      ...columns,
+      [source.droppableId]:
+        sourceItems,
+      [destination.droppableId]:
+        destItems,
+    })
 
-    if (error) {
-      toast.error(error.message)
-      return
-    }
-
-    toast.success(
-      "Pipeline updated"
-    )
+    await supabase
+      .from("leads")
+      .update({
+        status:
+          destination.droppableId,
+      })
+      .eq("id", removed.id)
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-4xl font-bold">
+    <div className="min-h-screen bg-black p-6 text-white">
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-3xl font-bold">
           Sales Pipeline
         </h1>
-
-        <p className="mt-2 text-zinc-400">
-          Drag and manage leads visually.
-        </p>
       </div>
 
       <DragDropContext
         onDragEnd={onDragEnd}
       >
-        <div className="grid gap-6 md:grid-cols-5">
-          {columns.map((column) => (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-6">
+          {stages.map((stage) => (
             <Droppable
-              droppableId={column}
-              key={column}
+              droppableId={stage}
+              key={stage}
             >
               {(provided) => (
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-4 min-h-[500px]"
+                  className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl"
                 >
                   <div className="mb-4 flex items-center justify-between">
-                    <h2 className="font-bold text-lg">
-                      {column}
+                    <h2 className="text-lg font-semibold">
+                      {stage}
                     </h2>
 
-                    <div className="rounded-full bg-black/30 px-3 py-1 text-sm">
+                    <span className="rounded-full bg-white/10 px-2 py-1 text-xs">
                       {
-                        leads.filter(
-                          (lead) =>
-                            lead.status ===
-                            column
-                        ).length
+                        columns[stage]
+                          ?.length
                       }
-                    </div>
+                    </span>
                   </div>
 
-                  <div className="space-y-4">
-                    {leads
-                      .filter(
-                        (lead) =>
-                          lead.status ===
-                          column
-                      )
-                      .map(
-                        (
-                          lead,
-                          index
-                        ) => (
-                          <Draggable
-                            draggableId={
-                              lead.id
-                            }
-                            index={index}
-                            key={lead.id}
-                          >
-                            {(
-                              provided
-                            ) => (
-                              <div
-                                ref={
-                                  provided.innerRef
+                  <div className="space-y-3">
+                    {columns[
+                      stage
+                    ]?.map(
+                      (
+                        lead: any,
+                        index: number
+                      ) => (
+                        <Draggable
+                          draggableId={String(
+                            lead.id
+                          )}
+                          index={index}
+                          key={lead.id}
+                        >
+                          {(
+                            provided
+                          ) => (
+                            <div
+                              ref={
+                                provided.innerRef
+                              }
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className="rounded-xl border border-white/10 bg-zinc-900 p-4 transition hover:border-orange-500"
+                            >
+                              <h3 className="font-medium">
+                                {
+                                  lead.name
                                 }
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                className="rounded-xl border border-white/10 bg-black/30 p-4 cursor-grab active:cursor-grabbing"
-                              >
-                                <h3 className="font-semibold">
-                                  {
-                                    lead.name
-                                  }
-                                </h3>
+                              </h3>
 
-                                <p className="mt-2 text-sm text-zinc-400">
-                                  {
-                                    lead.email
-                                  }
-                                </p>
-                              </div>
-                            )}
-                          </Draggable>
-                        )
-                      )}
+                              <p className="mt-1 text-sm text-zinc-400">
+                                {
+                                  lead.company
+                                }
+                              </p>
+
+                              <p className="mt-3 text-xs text-zinc-500">
+                                {
+                                  lead.email
+                                }
+                              </p>
+                            </div>
+                          )}
+                        </Draggable>
+                      )
+                    )}
 
                     {
                       provided.placeholder
