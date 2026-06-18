@@ -1,7 +1,27 @@
+"use client"
+
+import Link from "next/link"
+import { motion } from "framer-motion"
+import { Home, ArrowLeft } from "lucide-react"
+
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white">
-      <h1 className="text-2xl">Page not found</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-black px-6 text-white text-center">
+      <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, type: "spring" }}>
+        <div className="text-8xl font-black text-transparent bg-gradient-to-r from-orange-500 to-blue-500 bg-clip-text" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          404
+        </div>
+        <h1 className="mt-4 text-2xl font-bold">Page Not Found</h1>
+        <p className="mt-3 text-zinc-400">The page you are looking for doesn't exist or has been moved.</p>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <Link href="/" className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-blue-500 px-6 py-3 font-semibold transition hover:opacity-90">
+            <Home size={16} /> Go Home
+          </Link>
+          <button onClick={() => history.back()} className="flex items-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-zinc-300 transition hover:bg-white/10">
+            <ArrowLeft size={16} /> Go Back
+          </button>
+        </div>
+      </motion.div>
     </div>
   )
 }

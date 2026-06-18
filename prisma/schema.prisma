@@ -1,7 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// Omix CRM — Prisma Schema
+// Note: This project uses Supabase as the primary DB/Auth layer.
+// Prisma is available for direct DB access if needed.
 
 generator client {
   provider = "prisma-client-js"
@@ -11,4 +10,84 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Lead {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  name       String
+  company    String?
+  email      String?
+  phone      String?
+  status     String   @default("New")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  notes      Note[]
+  tasks      Task[]
+  files      File[]
+  activities LeadActivity[]
+
+  @@map("leads")
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  leadId    String   @map("lead_id")
+  content   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("notes")
+}
+
+model Task {
+  id        String    @id @default(uuid())
+  leadId    String    @map("lead_id")
+  title     String
+  dueDate   DateTime? @map("due_date")
+  completed Boolean   @default(false)
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  lead      Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("tasks")
+}
+
+model File {
+  id        String   @id @default(uuid())
+  leadId    String   @map("lead_id")
+  fileName  String   @map("file_name")
+  fileUrl   String   @map("file_url")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("files")
+}
+
+model LeadActivity {
+  id        String   @id @default(uuid())
+  leadId    String   @map("lead_id")
+  userId    String   @map("user_id")
+  action    String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@map("lead_activities")
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  title       String
+  message     String
+  type        String?
+  referenceId String?  @map("reference_id")
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("notifications")
 }
