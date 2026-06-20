@@ -22,7 +22,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="flex min-h-screen items-center justify-center bg-black">
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 1, repeat: Infinity, ease: [0, 0, 1, 1] as [number, number, number, number] }}
           className="h-8 w-8 rounded-full border-2 border-orange-500 border-t-transparent"
         />
       </div>
@@ -37,7 +37,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           key={typeof window !== "undefined" ? window.location.pathname : ""}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
+          transition={{ duration: 0.35, ease: [0, 0, 0.2, 1] as [number, number, number, number] }}
         >
           {children}
         </motion.div>

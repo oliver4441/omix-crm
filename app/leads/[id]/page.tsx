@@ -25,7 +25,7 @@ const inputCls = "rounded-xl border border-white/10 bg-zinc-900 px-4 py-3 text-s
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0, 0, 0.2, 1] as [number, number, number, number] } },
 }
 
 export default function LeadDetailsPage() {

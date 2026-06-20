@@ -9,7 +9,7 @@ import { Settings, User, Mail, Lock, Shield, Loader2, CheckCircle } from "lucide
 const inputCls = "w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-white outline-none transition focus:border-orange-400/60 placeholder:text-zinc-600"
 
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.09 } } }
-const fadeUp = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } } }
+const fadeUp = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0, 0, 0.2, 1] as [number, number, number, number] } } }
 
 export default function SettingsPage() {
   const [user, setUser] = useState<any>(null)

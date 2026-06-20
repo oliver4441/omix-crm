@@ -9,7 +9,7 @@ import { Briefcase, Mail, Phone, Building2, ChevronRight, Trophy } from "lucide-
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.07 } } }
 const card = {
   hidden: { opacity: 0, y: 18 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.38, ease: "easeOut" } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.38, ease: [0, 0, 0.2, 1] as [number, number, number, number] } },
 }
 
 export default function ClientsPage() {
