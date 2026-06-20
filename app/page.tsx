@@ -13,7 +13,10 @@ import {
   ChevronRight,
   Sparkles,
   TrendingUp,
+  TrendingDown,
   CheckCircle2,
+  Search,
+  MoreHorizontal,
 } from "lucide-react"
 
 const easeOut = [0, 0, 0.2, 1] as [number, number, number, number]
@@ -22,10 +25,10 @@ const easeInOut = [0.4, 0, 0.2, 1] as [number, number, number, number]
 const features = [
   {
     icon: KanbanSquare,
-    color: "text-orange-400",
-    bg: "bg-orange-500/10",
-    border: "border-orange-500/20",
-    glow: "group-hover:shadow-orange-500/10",
+    color: "text-purple-400",
+    bg: "bg-purple-500/10",
+    border: "border-purple-500/20",
+    glow: "group-hover:shadow-purple-500/10",
     title: "Sales Pipeline",
     desc: "Drag-and-drop Kanban board to move leads through every stage of your sales cycle.",
   },
@@ -40,10 +43,10 @@ const features = [
   },
   {
     icon: BarChart3,
-    color: "text-orange-400",
-    bg: "bg-orange-500/10",
-    border: "border-orange-500/20",
-    glow: "group-hover:shadow-orange-500/10",
+    color: "text-purple-400",
+    bg: "bg-purple-500/10",
+    border: "border-purple-500/20",
+    glow: "group-hover:shadow-purple-500/10",
     title: "Analytics Dashboard",
     desc: "Monitor conversion rates, pipeline value, and business growth with live charts.",
   },
@@ -58,10 +61,10 @@ const features = [
   },
   {
     icon: Zap,
-    color: "text-orange-400",
-    bg: "bg-orange-500/10",
-    border: "border-orange-500/20",
-    glow: "group-hover:shadow-orange-500/10",
+    color: "text-purple-400",
+    bg: "bg-purple-500/10",
+    border: "border-purple-500/20",
+    glow: "group-hover:shadow-purple-500/10",
     title: "Fast & Responsive",
     desc: "Built on Next.js 15 and Supabase for a lightning-fast experience on any device.",
   },
@@ -83,6 +86,12 @@ const stats = [
   { label: "Uptime", value: "99.9%", icon: Shield },
 ]
 
+const previewLeads = [
+  { name: "James Odhiambo", company: "KCB Group", status: "Hot", value: "KES 380K", color: "bg-red-500/15 text-red-400" },
+  { name: "Grace Wanjiku", company: "Equity Bank", status: "Warm", value: "KES 120K", color: "bg-orange-500/15 text-orange-400" },
+  { name: "Susan Waweru", company: "Jumia Kenya", status: "Hot", value: "KES 900K", color: "bg-red-500/15 text-red-400" },
+]
+
 const container = {
   hidden: {},
   show: { transition: { staggerChildren: 0.1 } },
@@ -95,36 +104,36 @@ const item = {
 export default function HomePage() {
   return (
     <main
-      className="min-h-screen bg-black text-white overflow-x-hidden"
-      style={{ fontFamily: "'Inter', sans-serif" }}
+      className="min-h-screen text-white overflow-x-hidden"
+      style={{ fontFamily: "'Inter', sans-serif", backgroundColor: "#0B1120" }}
     >
       {/* NAV */}
       <motion.nav
         initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="sticky top-0 z-50 border-b border-white/[0.08] bg-black/70 backdrop-blur-2xl"
+        className="sticky top-0 z-50 border-b border-white/[0.08] bg-[#0B1120]/80 backdrop-blur-2xl"
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 sm:py-5 lg:px-8">
           <span
-            className="text-xl font-bold tracking-tight"
+            className="text-lg font-bold tracking-tight sm:text-xl"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
-            <span className="bg-gradient-to-r from-orange-400 to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
               Omix
             </span>{" "}
             CRM
           </span>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/login"
-              className="rounded-full border border-white/10 px-5 py-2.5 text-sm font-medium text-zinc-300 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+              className="rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-zinc-300 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white sm:px-5 sm:py-2.5"
             >
               Login
             </Link>
             <Link
               href="/signup"
-              className="group flex items-center gap-1.5 rounded-full bg-gradient-to-r from-orange-500 to-blue-500 px-5 py-2.5 text-sm font-semibold shadow-lg shadow-orange-500/10 transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/20 hover:brightness-110"
+              className="group flex items-center gap-1.5 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 px-4 py-2 text-sm font-semibold shadow-lg shadow-purple-500/10 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 hover:brightness-110 sm:px-5 sm:py-2.5"
             >
               Get Started
               <ChevronRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -133,36 +142,35 @@ export default function HomePage() {
         </div>
       </motion.nav>
 
-      {/* HERO */}
+      {/* HERO — reduced ~40% vertical padding vs previous version */}
       <section className="relative overflow-hidden border-b border-white/[0.08]">
-        {/* soft gradient backdrop */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-orange-500/[0.04] via-transparent to-blue-500/[0.04]" />
+        {/* animated gradient backdrop */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-purple-500/[0.06] via-transparent to-blue-500/[0.05]" />
 
-        {/* animated background orbs */}
         <motion.div
-          animate={{ scale: [1, 1.15, 1], opacity: [0.12, 0.22, 0.12] }}
+          animate={{ scale: [1, 1.15, 1], opacity: [0.14, 0.24, 0.14] }}
           transition={{ duration: 8, repeat: Infinity, ease: easeInOut }}
-          className="pointer-events-none absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-orange-500/20 blur-[120px]"
+          className="pointer-events-none absolute -top-24 left-1/4 h-80 w-80 rounded-full bg-purple-500/25 blur-[110px]"
         />
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
           transition={{ duration: 10, repeat: Infinity, ease: easeInOut, delay: 2 }}
-          className="pointer-events-none absolute -bottom-32 right-1/4 h-96 w-96 rounded-full bg-blue-500/20 blur-[120px]"
+          className="pointer-events-none absolute -bottom-24 right-1/4 h-80 w-80 rounded-full bg-blue-500/22 blur-[110px]"
         />
         <motion.div
-          animate={{ opacity: [0.06, 0.12, 0.06] }}
+          animate={{ opacity: [0.05, 0.12, 0.05], scale: [1, 1.1, 1] }}
           transition={{ duration: 6, repeat: Infinity, ease: easeInOut, delay: 1 }}
-          className="pointer-events-none absolute left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-purple-500/10 blur-[140px]"
+          className="pointer-events-none absolute left-1/2 top-1/4 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-indigo-500/15 blur-[130px]"
         />
 
-        <div className="relative mx-auto flex max-w-7xl flex-col items-center px-6 py-28 text-center lg:py-36">
+        <div className="relative mx-auto flex max-w-7xl flex-col items-center px-5 py-16 text-center sm:px-6 sm:py-20 lg:px-8 lg:py-24">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="mb-8 flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-500/[0.08] px-4 py-2 text-sm text-orange-300 backdrop-blur-xl"
+            className="mb-5 flex items-center gap-2 rounded-full border border-purple-500/20 bg-purple-500/[0.08] px-4 py-1.5 text-xs text-purple-300 backdrop-blur-xl sm:text-sm"
           >
-            <Sparkles size={14} className="text-orange-400" />
+            <Sparkles size={13} className="text-purple-400" />
             Modern CRM Platform for Growing Businesses
           </motion.div>
 
@@ -170,17 +178,17 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="max-w-4xl bg-gradient-to-r from-white via-orange-200 to-blue-300 bg-clip-text text-5xl font-bold leading-[1.1] tracking-tight text-transparent sm:text-6xl"
+            className="max-w-3xl text-balance bg-gradient-to-r from-white via-purple-200 to-blue-300 bg-clip-text text-[2.25rem] font-bold leading-[1.15] tracking-tight text-transparent sm:text-5xl lg:text-[3.25rem]"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
-            Manage Leads, Clients & Sales From One Powerful Dashboard
+            Manage Leads & Sales From One Powerful Dashboard
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-8 max-w-2xl text-lg leading-relaxed text-zinc-400"
+            className="mt-5 max-w-xl px-2 text-base leading-relaxed text-zinc-400 sm:text-lg"
           >
             Omix CRM helps businesses track leads, manage follow-ups, monitor sales
             pipelines, and automate client workflows with a modern SaaS experience.
@@ -190,13 +198,13 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-10 flex flex-wrap items-center justify-center gap-4"
+            className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:gap-4"
           >
             <Link href="/signup">
               <motion.span
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-blue-500 px-8 py-4 text-base font-semibold shadow-lg shadow-orange-500/20 transition-shadow duration-300 hover:shadow-xl hover:shadow-orange-500/30"
+                className="flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 px-6 py-3.5 text-sm font-semibold shadow-lg shadow-purple-500/20 transition-shadow duration-300 hover:shadow-xl hover:shadow-purple-500/30 sm:px-8 sm:py-4 sm:text-base"
               >
                 Get Started Free <ArrowRight size={18} />
               </motion.span>
@@ -205,102 +213,177 @@ export default function HomePage() {
               <motion.span
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex items-center rounded-full border border-white/10 bg-white/[0.04] px-8 py-4 text-base font-semibold backdrop-blur-xl transition-colors duration-300 hover:border-white/20 hover:bg-white/[0.08]"
+                className="flex items-center rounded-full border border-white/10 bg-white/[0.04] px-6 py-3.5 text-sm font-semibold backdrop-blur-xl transition-colors duration-300 hover:border-white/20 hover:bg-white/[0.08] sm:px-8 sm:py-4 sm:text-base"
               >
                 Login
               </motion.span>
             </Link>
           </motion.div>
 
-          {/* Dashboard preview */}
+          {/* ===== Realistic Dashboard Preview ===== */}
           <motion.div
             initial={{ opacity: 0, y: 40, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.4, ease: easeOut }}
-            className="relative mt-20 w-full max-w-5xl"
+            className="relative mt-14 w-full max-w-5xl px-1 sm:mt-16"
           >
-            <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-orange-500/10 via-blue-500/5 to-transparent blur-2xl" />
-            <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] p-2 shadow-2xl shadow-black/50 backdrop-blur-xl">
-              <div className="flex items-center gap-1.5 border-b border-white/5 px-4 py-3">
+            <div className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-purple-500/15 via-blue-500/5 to-transparent blur-2xl" />
+
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] shadow-2xl shadow-black/60 backdrop-blur-2xl">
+              {/* browser chrome */}
+              <div className="flex items-center gap-1.5 border-b border-white/5 bg-white/[0.02] px-4 py-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-red-500/60" />
                 <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/60" />
                 <span className="h-2.5 w-2.5 rounded-full bg-green-500/60" />
                 <span className="ml-3 text-xs text-zinc-600">app.omixcrm.com/dashboard</span>
               </div>
-              <div className="grid grid-cols-1 gap-4 bg-gradient-to-br from-zinc-950 to-black p-6 sm:grid-cols-3">
-                <div className="col-span-1 space-y-3 sm:col-span-3 sm:grid sm:grid-cols-4 sm:gap-4 sm:space-y-0">
+
+              <div className="bg-gradient-to-br from-[#0d1424] to-[#0B1120] p-4 sm:p-7">
+                {/* revenue / metric cards */}
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
                   {[
-                    { label: "Total Leads", value: "2,847", color: "text-blue-400", bar: "60%" },
-                    { label: "Pipeline Value", value: "KES 4.2M", color: "text-orange-400", bar: "75%" },
-                    { label: "Deals Won", value: "38", color: "text-green-400", bar: "45%" },
-                    { label: "Conversion", value: "44.9%", color: "text-purple-400", bar: "44%" },
+                    { label: "Total Leads", value: "2,847", color: "text-blue-400", bar: "60%", trend: "+8.2%", up: true },
+                    { label: "Pipeline Value", value: "KES 4.2M", color: "text-purple-400", bar: "75%", trend: "+14.5%", up: true },
+                    { label: "Deals Won", value: "38", color: "text-green-400", bar: "45%", trend: "+5.1%", up: true },
+                    { label: "Avg. Deal Size", value: "KES 110K", color: "text-indigo-300", bar: "44%", trend: "-2.3%", up: false },
                   ].map((s, i) => (
                     <motion.div
                       key={s.label}
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.7 + i * 0.08 }}
-                      className="rounded-xl border border-white/5 bg-white/[0.03] p-4 text-left"
+                      className="rounded-xl border border-white/5 bg-white/[0.04] p-3.5 text-left backdrop-blur-xl sm:p-4"
                     >
-                      <p className="text-xs text-zinc-500">{s.label}</p>
-                      <p className={`mt-1.5 text-xl font-bold ${s.color}`} style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                      <p className="text-[11px] text-zinc-500 sm:text-xs">{s.label}</p>
+                      <p className={`mt-1.5 text-base font-bold sm:text-xl ${s.color}`} style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                         {s.value}
                       </p>
-                      <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/5">
+                      <div className="mt-1 flex items-center gap-1">
+                        {s.up ? (
+                          <TrendingUp size={10} className="text-green-400" />
+                        ) : (
+                          <TrendingDown size={10} className="text-red-400" />
+                        )}
+                        <span className={`text-[10px] ${s.up ? "text-green-400" : "text-red-400"}`}>{s.trend}</span>
+                      </div>
+                      <div className="mt-2.5 h-1 overflow-hidden rounded-full bg-white/5">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: s.bar }}
                           transition={{ delay: 1 + i * 0.08, duration: 0.8, ease: easeOut }}
-                          className={`h-full rounded-full bg-gradient-to-r from-orange-500 to-blue-500`}
+                          className="h-full rounded-full bg-gradient-to-r from-purple-500 to-blue-500"
                         />
                       </div>
                     </motion.div>
                   ))}
                 </div>
-                <div className="col-span-1 rounded-xl border border-white/5 bg-white/[0.03] p-4 text-left sm:col-span-3">
-                  <p className="mb-4 text-xs text-zinc-500">Pipeline by Stage</p>
-                  <div className="flex items-end gap-3 h-24">
-                    {[40, 65, 50, 80, 35, 95].map((h, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ height: 0 }}
-                        animate={{ height: `${h}%` }}
-                        transition={{ delay: 1.1 + i * 0.06, duration: 0.6, ease: easeOut }}
-                        className="flex-1 rounded-t-md bg-gradient-to-t from-orange-500/40 to-blue-500/60"
-                      />
-                    ))}
-                  </div>
+
+                {/* chart + leads table row */}
+                <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-5">
+                  {/* pipeline bar chart */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.05 }}
+                    className="rounded-xl border border-white/5 bg-white/[0.04] p-4 text-left backdrop-blur-xl lg:col-span-2"
+                  >
+                    <div className="mb-4 flex items-center justify-between">
+                      <p className="text-xs text-zinc-500">Pipeline by Stage</p>
+                      <MoreHorizontal size={14} className="text-zinc-700" />
+                    </div>
+                    <div className="flex h-28 items-end gap-2.5 sm:h-32">
+                      {[40, 65, 50, 80, 35, 95].map((h, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ height: 0 }}
+                          animate={{ height: `${h}%` }}
+                          transition={{ delay: 1.15 + i * 0.06, duration: 0.6, ease: easeOut }}
+                          className="flex-1 rounded-t-md bg-gradient-to-t from-purple-500/40 to-blue-500/70"
+                        />
+                      ))}
+                    </div>
+                    <div className="mt-3 flex justify-between text-[9px] text-zinc-600">
+                      <span>Lead</span><span>Qual.</span><span>Prop.</span><span>Neg.</span><span>Won</span>
+                    </div>
+                  </motion.div>
+
+                  {/* leads table */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.1 }}
+                    className="rounded-xl border border-white/5 bg-white/[0.04] p-4 text-left backdrop-blur-xl lg:col-span-3"
+                  >
+                    <div className="mb-3 flex items-center justify-between">
+                      <p className="text-xs text-zinc-500">Recent Leads</p>
+                      <div className="flex items-center gap-1.5 rounded-md border border-white/5 bg-white/[0.03] px-2 py-1">
+                        <Search size={10} className="text-zinc-600" />
+                        <span className="text-[10px] text-zinc-600">Search…</span>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      {previewLeads.map((lead, i) => (
+                        <motion.div
+                          key={lead.name}
+                          initial={{ opacity: 0, x: -8 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 1.25 + i * 0.08 }}
+                          className="flex items-center justify-between gap-2 rounded-lg border border-white/5 bg-white/[0.02] px-3 py-2 sm:px-3.5"
+                        >
+                          <div className="flex min-w-0 items-center gap-2.5">
+                            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-purple-500/40 to-blue-500/40 text-[9px] font-semibold sm:h-7 sm:w-7">
+                              {lead.name.split(" ").map((n) => n[0]).join("")}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="truncate text-[11px] font-medium text-zinc-200 sm:text-xs">{lead.name}</p>
+                              <p className="truncate text-[10px] text-zinc-600">{lead.company}</p>
+                            </div>
+                          </div>
+                          <div className="flex shrink-0 items-center gap-2">
+                            <span className={`rounded-full px-2 py-0.5 text-[9px] font-medium ${lead.color}`}>{lead.status}</span>
+                            <span className="hidden text-[10px] font-medium text-zinc-400 sm:inline">{lead.value}</span>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Stats bar */}
+          {/* ===== Floating Stat Cards ===== */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-20 grid w-full max-w-4xl grid-cols-2 gap-5 md:grid-cols-4"
+            className="mt-14 grid w-full max-w-4xl grid-cols-2 gap-4 sm:mt-16 sm:gap-5 md:grid-cols-4"
           >
             {stats.map((s, i) => {
               const Icon = s.icon
               return (
                 <motion.div
                   key={s.label}
-                  initial={{ opacity: 0, y: 12 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 + i * 0.1 }}
-                  whileHover={{ y: -4 }}
-                  className="group rounded-2xl border border-white/10 bg-white/[0.04] px-6 py-6 backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07] hover:shadow-lg hover:shadow-black/30"
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  className="group relative rounded-2xl p-[1px] transition-all duration-300"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(168,85,247,0.35), rgba(59,130,246,0.35))",
+                  }}
                 >
-                  <Icon size={18} className="mx-auto mb-3 text-zinc-500 transition-colors duration-300 group-hover:text-orange-400" />
-                  <div
-                    className="text-3xl font-bold text-white"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-                  >
-                    {s.value}
+                  <div className="relative h-full rounded-2xl bg-[#0d1424]/90 px-5 py-6 backdrop-blur-xl transition-all duration-300 group-hover:bg-[#101a2e]/90 sm:px-6">
+                    <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-500/0 to-blue-500/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:from-purple-500/[0.06] group-hover:to-blue-500/[0.06]" />
+                    <Icon size={18} className="mx-auto mb-3 text-zinc-500 transition-colors duration-300 group-hover:text-purple-400" />
+                    <div
+                      className="text-2xl font-bold text-white sm:text-3xl"
+                      style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                    >
+                      {s.value}
+                    </div>
+                    <div className="mt-1.5 text-xs text-zinc-500 sm:text-sm">{s.label}</div>
                   </div>
-                  <div className="mt-1.5 text-sm text-zinc-500">{s.label}</div>
                 </motion.div>
               )
             })}
@@ -309,7 +392,7 @@ export default function HomePage() {
       </section>
 
       {/* FEATURES */}
-      <section className="mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
+      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -318,12 +401,12 @@ export default function HomePage() {
           className="mx-auto max-w-2xl text-center"
         >
           <h2
-            className="text-4xl font-bold tracking-tight sm:text-5xl"
+            className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             Everything You Need To Run Your CRM
           </h2>
-          <p className="mt-5 text-lg text-zinc-400">
+          <p className="mt-4 px-2 text-base text-zinc-400 sm:mt-5 sm:text-lg">
             Built for modern businesses, agencies, SACCOs, and sales teams across Africa.
           </p>
         </motion.div>
@@ -333,7 +416,7 @@ export default function HomePage() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="mt-20 grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+          className="mt-14 grid gap-5 sm:mt-20 sm:gap-6 md:grid-cols-2 lg:grid-cols-3"
         >
           {features.map((f) => {
             const Icon = f.icon
@@ -342,18 +425,18 @@ export default function HomePage() {
                 key={f.title}
                 variants={item}
                 whileHover={{ y: -6 }}
-                className={`group relative rounded-[20px] border ${f.border} bg-white/[0.03] p-9 backdrop-blur-xl transition-all duration-300 hover:bg-white/[0.06] hover:shadow-2xl ${f.glow}`}
+                className={`group relative rounded-[20px] border ${f.border} bg-white/[0.03] p-7 shadow-lg shadow-black/20 backdrop-blur-xl transition-all duration-300 hover:bg-white/[0.06] hover:shadow-2xl sm:p-9 ${f.glow}`}
               >
-                <div className={`inline-flex rounded-2xl border ${f.border} ${f.bg} p-3.5 transition-transform duration-300 group-hover:scale-110`}>
-                  <Icon className={f.color} size={26} />
+                <div className={`inline-flex rounded-2xl border ${f.border} ${f.bg} p-4 transition-transform duration-300 group-hover:scale-110`}>
+                  <Icon className={f.color} size={30} />
                 </div>
                 <h3
-                  className="mt-7 text-xl font-semibold tracking-tight"
+                  className="mt-6 text-lg font-semibold tracking-tight sm:mt-7 sm:text-xl"
                   style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
                   {f.title}
                 </h3>
-                <p className="mt-3 leading-relaxed text-zinc-400">{f.desc}</p>
+                <p className="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">{f.desc}</p>
               </motion.div>
             )
           })}
@@ -365,32 +448,32 @@ export default function HomePage() {
         <motion.div
           animate={{ opacity: [0.08, 0.16, 0.08] }}
           transition={{ duration: 7, repeat: Infinity, ease: easeInOut }}
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-orange-500/20 to-blue-500/20 blur-[120px]"
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[350px] w-[90vw] max-w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-[120px]"
         />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="relative mx-auto flex max-w-7xl flex-col items-center px-6 py-28 text-center lg:py-32"
+          className="relative mx-auto flex max-w-7xl flex-col items-center px-5 py-20 text-center sm:px-6 sm:py-28 lg:py-32"
         >
           <h2
-            className="max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl"
+            className="max-w-3xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             Ready To Scale Your Business?
           </h2>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">
+          <p className="mt-5 max-w-xl px-2 text-base leading-relaxed text-zinc-400 sm:mt-6 sm:text-lg">
             Start managing leads, follow-ups, clients, and sales operations with Omix CRM today.
           </p>
           <motion.div
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.98 }}
-            className="mt-10"
+            className="mt-8 sm:mt-10"
           >
             <Link
               href="/signup"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-500 to-blue-500 px-10 py-5 text-lg font-semibold shadow-xl shadow-orange-500/20 transition-shadow duration-300 hover:shadow-2xl hover:shadow-orange-500/30"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 px-8 py-4 text-base font-semibold shadow-xl shadow-purple-500/20 transition-shadow duration-300 hover:shadow-2xl hover:shadow-purple-500/30 sm:px-10 sm:py-5 sm:text-lg"
             >
               Create Free Account <ArrowRight size={20} />
             </Link>
@@ -398,7 +481,7 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      <footer className="border-t border-white/[0.08] py-10 text-center text-sm text-zinc-600">
+      <footer className="border-t border-white/[0.08] px-5 py-10 text-center text-sm text-zinc-600">
         © {new Date().getFullYear()} Omix CRM · Built with Next.js & Supabase
       </footer>
     </main>
