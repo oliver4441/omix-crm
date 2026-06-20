@@ -20,11 +20,22 @@ export default function SignupPage() {
     e.preventDefault()
     if (password.length < 6) { toast.error("Password must be at least 6 characters"); return }
     setLoading(true)
-    const { error } = await supabase.auth.signUp({ email, password })
+    const { data, error } = await supabase.auth.signUp({ email, password })
     setLoading(false)
     if (error) { toast.error(error.message); return }
-    toast.success("Account created! Check your email to confirm.")
-    router.push("/dashboard")
+
+    if (data.session) {
+      // Email confirmation is disabled in this Supabase project — a session
+      // was issued immediately, so we can log the user straight in.
+      toast.success("Account created! Welcome to Omix CRM.")
+      router.refresh()
+      router.push("/dashboard")
+    } else {
+      // Email confirmation is required — there's no session yet, so sending
+      // the user to /dashboard would just bounce them back to /login via
+      // the middleware. Keep them on this page instead.
+      toast.success("Account created! Check your email to confirm before signing in.")
+    }
   }
 
   return (

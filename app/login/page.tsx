@@ -19,10 +19,18 @@ export default function LoginPage() {
   const signIn = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     setLoading(false)
+
     if (error) { toast.error(error.message); return }
+    if (!data.session) { toast.error("Sign-in succeeded but no session was returned. Please try again."); return }
+
     toast.success("Welcome back!")
+
+    // router.refresh() forces Next.js to re-run the server/middleware layer
+    // with the now-current auth cookie before we navigate, so proxy.ts sees
+    // an authenticated request instead of redirecting back to /login.
+    router.refresh()
     router.push("/dashboard")
   }
 
