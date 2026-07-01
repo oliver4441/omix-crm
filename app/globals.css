@@ -79,3 +79,9 @@ body {
 /* Drag handle cursor */
 [data-rbd-drag-handle-draggable-id] { cursor: grab; }
 [data-rbd-drag-handle-draggable-id]:active { cursor: grabbing; }
+
+/* Live pipeline ticker (landing page signature element) */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
