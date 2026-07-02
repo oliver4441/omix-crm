@@ -1,57 +1,42 @@
 "use client"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ArrowRight, Zap } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { fadeUp } from "./motion"
 
 export function CTASection() {
   return (
-    <section className="border-t border-white/[0.05] py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-        <motion.div
-          variants={fadeUp} initial="hidden" whileInView="show" viewport={{once:true}}
-          className="relative overflow-hidden rounded-[28px] bg-[#111111] px-8 py-16 text-center sm:px-12 sm:py-20 lg:py-24"
-          style={{boxShadow:"inset 0 0 0 1px rgba(250,204,21,0.15), 0 0 80px rgba(250,204,21,0.06)"}}>
+    <section className="border-t border-white/[0.06] py-24 sm:py-32 lg:py-40">
+      <div className="mx-auto max-w-[1280px] px-6 sm:px-8">
+        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{once:true}}
+          className="relative overflow-hidden rounded-[28px] border border-white/[0.07] bg-[#111111] px-8 py-20 text-center sm:px-16 sm:py-24 lg:py-28">
+          {/* Very subtle yellow glow — centred */}
+          <div className="pointer-events-none absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{background:"radial-gradient(circle, rgba(250,204,21,0.12) 0%, transparent 70%)"}}/>
+          {/* Grid overlay */}
+          <div className="hero-grid pointer-events-none absolute inset-0 opacity-60"/>
+          <div className="pointer-events-none absolute inset-0"
+            style={{background:"radial-gradient(ellipse 70% 70% at 50% 50%, transparent 30%, #111111 80%)"}}/>
 
-          {/* background glow blobs */}
-          <motion.div
-            animate={{scale:[1,1.3,1],opacity:[0.3,0.6,0.3]}}
-            transition={{duration:6,repeat:Infinity,ease:"easeInOut"}}
-            className="pointer-events-none absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#FACC15]/20 blur-[80px]"/>
-          <motion.div
-            animate={{scale:[1,1.2,1],opacity:[0.15,0.3,0.15]}}
-            transition={{duration:8,repeat:Infinity,ease:"easeInOut",delay:2}}
-            className="pointer-events-none absolute bottom-0 right-1/4 h-48 w-48 rounded-full bg-amber-500/15 blur-[60px]"/>
-
-          {/* hero grid overlay */}
-          <div className="hero-grid pointer-events-none absolute inset-0 opacity-50"/>
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,transparent_40%,#111111_90%)]"/>
-
-          <div className="relative z-10">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#FACC15]/20 bg-[#FACC15]/[0.07] px-4 py-1.5 text-xs font-bold text-[#FACC15]">
-              <Zap size={12} fill="#FACC15"/> Free to start · No credit card needed
-            </div>
-            <h2
-              className="mx-auto max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl"
-              style={{fontFamily:"'Space Grotesk',sans-serif"}}>
-              Your next deal is already<br/>
-              <span className="bg-gradient-to-r from-[#FACC15] via-amber-300 to-[#FACC15] bg-clip-text text-transparent text-glow">
-                in your pipeline.
-              </span>
+          <div className="relative">
+            <p className="text-[12px] font-semibold uppercase tracking-[0.15em] text-zinc-500">
+              Free to start · No credit card needed
+            </p>
+            <h2 className="mx-auto mt-6 max-w-[600px] text-[clamp(2rem,4vw,3.5rem)] font-extrabold leading-[1.08] tracking-[-0.04em] text-white">
+              Your next deal is already in your pipeline.
             </h2>
-            <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-zinc-400 sm:text-lg">
-              Join hundreds of sales teams across Kenya who use Omix CRM to track
-              leads and close more deals every month.
+            <p className="mx-auto mt-6 max-w-[480px] text-[18px] leading-[1.75] text-[#A1A1AA]">
+              Join hundreds of sales teams across Kenya who use Omix CRM to track leads and close more deals every month.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <motion.div whileHover={{scale:1.04}} whileTap={{scale:0.97}}>
+              <motion.div whileHover={{scale:1.03}} whileTap={{scale:0.97}}>
                 <Link href="/signup"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#FACC15] px-8 py-4 text-base font-extrabold text-black shadow-2xl shadow-[#FACC15]/25 transition-all hover:bg-[#FDE68A] hover:shadow-[#FACC15]/40">
-                  Start Free Today <ArrowRight size={18}/>
+                  className="inline-flex items-center gap-2 rounded-full bg-[#FACC15] px-8 py-4 text-[15px] font-bold text-black shadow-xl shadow-[#FACC15]/20 transition-shadow hover:shadow-[#FACC15]/35">
+                  Start Free Today <ArrowRight size={17}/>
                 </Link>
               </motion.div>
               <Link href="/login"
-                className="inline-flex items-center rounded-full border border-white/[0.1] bg-white/[0.04] px-8 py-4 text-base font-semibold text-zinc-300 backdrop-blur-xl transition-all hover:border-white/[0.2] hover:text-white">
+                className="inline-flex items-center rounded-full border border-white/[0.1] bg-white/[0.04] px-8 py-4 text-[15px] font-semibold text-zinc-300 backdrop-blur-sm transition-all hover:border-white/[0.2] hover:text-white">
                 Sign in
               </Link>
             </div>

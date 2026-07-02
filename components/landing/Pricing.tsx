@@ -7,63 +7,66 @@ import { pricingTiers } from "./content"
 
 export function Pricing() {
   return (
-    <section id="pricing" className="border-t border-white/[0.05] py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{once:true}} className="mb-14">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#FACC15]">Pricing</p>
-          <h2 className="mt-4 max-w-lg text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl"
-            style={{fontFamily:"'Space Grotesk',sans-serif"}}>
-            Simple pricing,<br/><span className="text-zinc-500">billed in KES</span>
+    <section id="pricing" className="border-t border-white/[0.06] py-24 sm:py-32 lg:py-40">
+      <div className="mx-auto max-w-[1280px] px-6 sm:px-8">
+        {/* Heading */}
+        <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{once:true}}
+          className="mb-16 sm:mb-20">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.15em] text-[#FACC15]">Pricing</p>
+          <h2 className="mt-5 max-w-[420px] text-[clamp(2rem,3.5vw,3rem)] font-extrabold leading-[1.1] tracking-[-0.03em] text-white">
+            Simple pricing, billed in KES
           </h2>
-          <p className="mt-4 max-w-sm text-sm text-zinc-500">Free trial on every plan. No credit card required.</p>
+          <p className="mt-5 max-w-[360px] text-[18px] leading-[1.75] text-[#A1A1AA]">
+            Free trial on every plan. No credit card required.
+          </p>
         </motion.div>
 
-        <motion.div variants={stagger(0.1)} initial="hidden" whileInView="show" viewport={{once:true}}
-          className="grid gap-5 lg:grid-cols-3">
+        {/* Cards */}
+        <motion.div variants={stagger(0.09)} initial="hidden" whileInView="show" viewport={{once:true}}
+          className="grid gap-4 sm:gap-5 lg:grid-cols-3">
           {pricingTiers.map(tier => (
-            <motion.div key={tier.name} variants={fadeUp}
-              whileHover={{y:tier.featured?-8:-5,scale:tier.featured?1.01:1}}
-              className={`gradient-border relative flex flex-col rounded-[20px] p-7 transition-all duration-300 sm:p-8 ${
+            <motion.div key={tier.name} variants={fadeUp} whileHover={{y:tier.featured ? -7 : -4}}
+              className={`relative flex flex-col rounded-[20px] border p-8 transition-all duration-300 sm:p-10 ${
                 tier.featured
-                  ? "bg-[#141414] shadow-2xl shadow-[#FACC15]/10"
-                  : "bg-[#111111] hover:bg-[#141414]"
+                  ? "border-[#FACC15]/20 bg-[#171717] shadow-[0_0_60px_rgba(250,204,21,0.06)]"
+                  : "border-white/[0.06] bg-[#111111] hover:border-white/[0.1] hover:bg-[#171717]"
               }`}>
               {tier.featured && (
-                <>
-                  {/* animated yellow border */}
-                  <div className="pointer-events-none absolute inset-0 rounded-[20px]"
-                    style={{boxShadow:"inset 0 0 0 1px rgba(250,204,21,0.25), 0 0 40px rgba(250,204,21,0.08)"}}/>
-                  <span className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full bg-[#FACC15] px-4 py-1.5 text-[11px] font-extrabold text-black shadow-xl shadow-[#FACC15]/30">
-                    <Zap size={10} fill="black"/> Most Popular
-                  </span>
-                </>
+                <span className="absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full bg-[#FACC15] px-4 py-1.5 text-[12px] font-bold text-black shadow-lg shadow-[#FACC15]/20">
+                  <Zap size={11} fill="black"/> Most Popular
+                </span>
               )}
 
-              <h3 className="text-base font-bold text-white" style={{fontFamily:"'Space Grotesk',sans-serif"}}>{tier.name}</h3>
-              <p className="mt-1.5 text-xs text-zinc-500">{tier.desc}</p>
+              {/* Name + desc */}
+              <h3 className="text-[16px] font-bold tracking-[-0.02em] text-white">{tier.name}</h3>
+              <p className="mt-2 text-[14px] text-zinc-500">{tier.desc}</p>
 
-              <div className="my-6 border-b border-white/[0.05] pb-6">
+              {/* Price */}
+              <div className="my-8 border-b border-white/[0.06] pb-8">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-extrabold text-white sm:text-4xl"
-                    style={{fontFamily:"'Space Grotesk',sans-serif"}}>{tier.price}</span>
+                  <span className="text-[36px] font-extrabold tracking-[-0.04em] text-white">
+                    {tier.price}
+                  </span>
                 </div>
-                <p className="mt-1 text-xs text-zinc-600">{tier.unit}</p>
+                <p className="mt-1 text-[13px] text-zinc-600">{tier.unit}</p>
               </div>
 
-              <ul className="flex-1 space-y-3 mb-8">
+              {/* Features */}
+              <ul className="flex-1 space-y-3.5 mb-9">
                 {tier.features.map(feat => (
-                  <li key={feat} className="flex items-start gap-2.5 text-sm text-zinc-400">
-                    <Check size={14} className={`mt-0.5 shrink-0 ${tier.featured?"text-[#FACC15]":"text-zinc-500"}`}/>
+                  <li key={feat} className="flex items-start gap-3 text-[14px] text-zinc-400">
+                    <Check size={15} className={`mt-0.5 shrink-0 ${tier.featured ? "text-[#FACC15]" : "text-zinc-600"}`}/>
                     {feat}
                   </li>
                 ))}
               </ul>
 
+              {/* CTA */}
               <Link href={tier.href}
-                className={`flex items-center justify-center rounded-xl px-5 py-3.5 text-sm font-bold transition-all duration-300 ${
+                className={`flex items-center justify-center rounded-xl px-5 py-3.5 text-[14px] font-bold transition-all duration-200 ${
                   tier.featured
-                    ? "bg-[#FACC15] text-black shadow-lg shadow-[#FACC15]/20 hover:bg-[#FDE68A] hover:shadow-[#FACC15]/35"
-                    : "border border-white/[0.08] text-zinc-300 hover:border-white/[0.18] hover:bg-white/[0.04] hover:text-white"
+                    ? "bg-[#FACC15] text-black shadow-md shadow-[#FACC15]/15 hover:bg-[#FDE68A]"
+                    : "border border-white/[0.1] text-zinc-300 hover:border-white/[0.2] hover:text-white"
                 }`}>
                 {tier.cta}
               </Link>
