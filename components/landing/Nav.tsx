@@ -1,75 +1,68 @@
 "use client"
-
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ChevronRight } from "lucide-react"
+import { ChevronRight, Zap } from "lucide-react"
 import { useEffect, useState } from "react"
 
-const navLinks = [
-  { label: "Features", href: "#features" },
-  { label: "How It Works", href: "#workflow" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "FAQ", href: "#faq" },
+const links = [
+  { label:"Features",    href:"#features"   },
+  { label:"How It Works",href:"#workflow"   },
+  { label:"Analytics",   href:"#analytics"  },
+  { label:"Pricing",     href:"#pricing"    },
 ]
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false)
-
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20)
-    window.addEventListener("scroll", handler, { passive: true })
-    return () => window.removeEventListener("scroll", handler)
+    const fn = () => setScrolled(window.scrollY > 30)
+    window.addEventListener("scroll", fn, { passive:true })
+    return () => window.removeEventListener("scroll", fn)
   }, [])
 
   return (
-    <motion.nav
-      initial={{ opacity: 0, y: -16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
-        scrolled
-          ? "border-white/[0.08] bg-[#080A12]/90 backdrop-blur-2xl shadow-lg shadow-black/20"
-          : "border-transparent bg-transparent"
+    <motion.header
+      initial={{ opacity:0, y:-20 }}
+      animate={{ opacity:1, y:0 }}
+      transition={{ duration:0.6 }}
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+        scrolled ? "py-3 bg-[#0A0A0A]/85 backdrop-blur-2xl border-b border-white/[0.06] shadow-2xl shadow-black/50" : "py-5"
       }`}
     >
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between px-5 py-4 sm:px-6 sm:py-5 lg:px-8">
-        <Link
-          href="#top"
-          className="text-base font-bold tracking-tight sm:text-lg"
-          style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-        >
-          <span className="bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">Omix</span>{" "}
-          <span className="text-white">CRM</span>
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 sm:px-6 lg:px-8">
+        {/* Logo */}
+        <Link href="#top" className="flex items-center gap-2">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FACC15]">
+            <Zap size={16} className="text-black" fill="black" />
+          </span>
+          <span className="text-base font-bold tracking-tight text-white" style={{fontFamily:"'Space Grotesk',sans-serif"}}>
+            Omix <span className="text-[#FACC15]">CRM</span>
+          </span>
         </Link>
 
-        <div className="hidden items-center gap-7 lg:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-zinc-500 transition-colors duration-200 hover:text-white"
-            >
-              {link.label}
+        {/* Links */}
+        <nav className="hidden items-center gap-8 lg:flex">
+          {links.map(l => (
+            <a key={l.href} href={l.href}
+              className="text-sm font-medium text-zinc-400 transition-colors duration-200 hover:text-white">
+              {l.label}
             </a>
           ))}
-        </div>
+        </nav>
 
-        <div className="flex items-center gap-2">
-          <Link
-            href="/login"
-            className="hidden rounded-full border border-white/[0.1] px-4 py-2 text-sm font-medium text-zinc-400 transition-all duration-200 hover:border-white/20 hover:text-white sm:inline-block sm:px-5 sm:py-2.5"
-          >
+        {/* CTAs */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link href="/login"
+            className="hidden rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-zinc-400 transition-all hover:border-white/20 hover:text-white sm:block sm:px-5">
             Login
           </Link>
-          <Link
-            href="/signup"
-            className="group flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-500 to-blue-500 px-4 py-2 text-sm font-semibold shadow-md shadow-violet-500/20 transition-all duration-300 hover:shadow-lg hover:shadow-violet-500/30 hover:brightness-110 sm:px-5 sm:py-2.5"
-          >
-            Get Started
-            <ChevronRight size={14} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+          <Link href="/signup">
+            <motion.span whileHover={{scale:1.04}} whileTap={{scale:0.97}}
+              className="flex cursor-pointer items-center gap-1.5 rounded-full bg-[#FACC15] px-4 py-2 text-sm font-bold text-black shadow-lg shadow-[#FACC15]/20 transition-all hover:bg-[#FDE68A] hover:shadow-[#FACC15]/30 sm:px-5 sm:py-2.5">
+              Get Started <ChevronRight size={14} />
+            </motion.span>
           </Link>
         </div>
       </div>
-    </motion.nav>
+    </motion.header>
   )
 }

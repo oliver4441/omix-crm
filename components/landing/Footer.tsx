@@ -1,56 +1,98 @@
 import Link from "next/link"
-import { Github } from "lucide-react"
+import { Github, Twitter, Linkedin, Mail, Zap } from "lucide-react"
 
 const cols = [
-  { heading: "Product", links: [{ l: "Features", h: "#features" }, { l: "How It Works", h: "#workflow" }, { l: "Pricing", h: "#pricing" }, { l: "FAQ", h: "#faq" }] },
-  { heading: "Account", links: [{ l: "Log in", h: "/login" }, { l: "Sign up free", h: "/signup" }] },
+  {
+    heading:"Product",
+    links:[
+      {l:"Features",   h:"#features" },
+      {l:"Pipeline",   h:"#workflow"  },
+      {l:"Analytics",  h:"#analytics" },
+      {l:"Pricing",    h:"#pricing"   },
+      {l:"FAQ",        h:"#faq"       },
+    ],
+  },
+  {
+    heading:"Company",
+    links:[
+      {l:"About",      h:"#" },
+      {l:"Blog",       h:"#" },
+      {l:"Careers",    h:"#" },
+      {l:"Contact",    h:"mailto:hello@omixcrm.com" },
+    ],
+  },
+  {
+    heading:"Account",
+    links:[
+      {l:"Sign up free", h:"/signup" },
+      {l:"Log in",       h:"/login"  },
+    ],
+  },
+]
+
+const socials = [
+  { icon:Github,   href:"https://github.com/Manu-del-source/omix-crm", label:"GitHub"  },
+  { icon:Twitter,  href:"#",                                             label:"Twitter" },
+  { icon:Linkedin, href:"#",                                             label:"LinkedIn"},
+  { icon:Mail,     href:"mailto:hello@omixcrm.com",                     label:"Email"   },
 ]
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/[0.06]">
-      <div className="mx-auto max-w-[1400px] px-5 py-14 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-4">
-          <div className="sm:col-span-2">
-            <span className="text-base font-bold tracking-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              <span className="bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">Omix</span>{" "}
-              <span className="text-white">CRM</span>
-            </span>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-zinc-600">
-              Lead tracking and client management for sales teams, agencies, and SACCOs across Africa.
+    <footer className="border-t border-white/[0.05]">
+      <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-5">
+          {/* brand */}
+          <div className="lg:col-span-2">
+            <Link href="#top" className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FACC15]">
+                <Zap size={15} className="text-black" fill="black"/>
+              </span>
+              <span className="text-base font-extrabold text-white" style={{fontFamily:"'Space Grotesk',sans-serif"}}>
+                Omix <span className="text-[#FACC15]">CRM</span>
+              </span>
+            </Link>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-zinc-500">
+              Lead tracking and client management for sales teams, agencies, and
+              SACCOs across Africa.
             </p>
-            <a
-              href="https://github.com/Manu-del-source/omix-crm"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-5 inline-flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3.5 py-2 text-xs font-medium text-zinc-500 transition-colors hover:border-white/[0.15] hover:text-zinc-300"
-            >
-              <Github size={13} />
-              View on GitHub
-            </a>
+            <div className="mt-6 flex gap-3">
+              {socials.map(s => (
+                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label}
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.07] bg-white/[0.03] text-zinc-500 transition-all hover:border-[#FACC15]/20 hover:bg-[#FACC15]/[0.07] hover:text-[#FACC15]">
+                  <s.icon size={15}/>
+                </a>
+              ))}
+            </div>
           </div>
-          {cols.map((col) => (
+
+          {/* link cols */}
+          {cols.map(col => (
             <div key={col.heading}>
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-600 mb-4">{col.heading}</p>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-600 mb-4">{col.heading}</p>
               <ul className="space-y-3">
-                {col.links.map((link) => (
+                {col.links.map(link => (
                   <li key={link.l}>
-                    {link.h.startsWith("#") || link.h.startsWith("/") ? (
-                      <Link href={link.h} className="text-sm text-zinc-500 transition-colors hover:text-zinc-200">
-                        {link.l}
-                      </Link>
-                    ) : (
-                      <a href={link.h} className="text-sm text-zinc-500 transition-colors hover:text-zinc-200">{link.l}</a>
-                    )}
+                    <Link href={link.h}
+                      className="text-sm text-zinc-500 transition-colors hover:text-zinc-200">
+                      {link.l}
+                    </Link>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/[0.06] pt-6 sm:flex-row">
-          <p className="text-xs text-zinc-700">© {new Date().getFullYear()} Omix CRM · Built with Next.js &amp; Supabase</p>
-          <p className="text-xs text-zinc-700">Made in Kenya 🇰🇪</p>
+
+        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/[0.05] pt-7 sm:flex-row">
+          <p className="text-xs text-zinc-700">
+            © {new Date().getFullYear()} Omix CRM. All rights reserved.
+          </p>
+          <p className="flex items-center gap-1.5 text-xs text-zinc-700">
+            Made with{" "}
+            <span className="text-[#FACC15]">♥</span>
+            {" "}in Kenya 🇰🇪 · Built on Next.js &amp; Supabase
+          </p>
         </div>
       </div>
     </footer>
