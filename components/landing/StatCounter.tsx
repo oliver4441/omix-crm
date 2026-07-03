@@ -2,26 +2,25 @@
 import { useEffect, useRef, useState } from "react"
 import { useInView } from "framer-motion"
 
-interface Props { value: number; suffix: string; prefix?: string; duration?: number }
-
-export function StatCounter({ value, suffix, prefix = "", duration = 1800 }: Props) {
+export function StatCounter({ end, suffix, prefix="", dur=1600 }:
+  { end:number; suffix:string; prefix?:string; dur?:number }) {
   const ref    = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
-  const [display, setDisplay] = useState("0")
+  const inView = useInView(ref, { once:true, margin:"-60px" })
+  const [val, setVal] = useState("0")
 
   useEffect(() => {
     if (!inView) return
-    const isDecimal = value % 1 !== 0
-    const t0        = performance.now()
-    const tick      = (now: number) => {
-      const p = Math.min((now - t0) / duration, 1)
-      const e = 1 - Math.pow(1 - p, 3) // cubic ease-out
-      const v = value * e
-      setDisplay(isDecimal ? v.toFixed(1) : Math.floor(v).toLocaleString())
+    const dec = end % 1 !== 0
+    const t0  = performance.now()
+    const tick = (t:number) => {
+      const p = Math.min((t-t0)/dur,1)
+      const e = 1 - (1-p)**3
+      const v = end*e
+      setVal(dec ? v.toFixed(1) : Math.floor(v).toLocaleString())
       if (p < 1) requestAnimationFrame(tick)
     }
     requestAnimationFrame(tick)
-  }, [inView, value, duration])
+  },[inView,end,dur])
 
-  return <span ref={ref}>{prefix}{display}{suffix}</span>
+  return <span ref={ref}>{prefix}{val}{suffix}</span>
 }

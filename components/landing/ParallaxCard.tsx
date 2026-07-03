@@ -2,33 +2,26 @@
 import { useRef } from "react"
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
 
-interface Props { children: React.ReactNode; className?: string }
+export function ParallaxCard({ children, className="" }: { children:React.ReactNode; className?:string }) {
+  const el   = useRef<HTMLDivElement>(null)
+  const mx   = useMotionValue(0)
+  const my   = useMotionValue(0)
+  const sx   = useSpring(mx, { stiffness:100, damping:20 })
+  const sy   = useSpring(my, { stiffness:100, damping:20 })
+  const rx   = useTransform(sy, [-0.5,0.5], [4,-4])
+  const ry   = useTransform(sx, [-0.5,0.5], [-4,4])
 
-export function ParallaxCard({ children, className = "" }: Props) {
-  const ref   = useRef<HTMLDivElement>(null)
-  const rawX  = useMotionValue(0)
-  const rawY  = useMotionValue(0)
-
-  // Smooth spring — feels silky, not snappy
-  const x = useSpring(rawX, { stiffness: 120, damping: 22 })
-  const y = useSpring(rawY, { stiffness: 120, damping: 22 })
-
-  // Limit rotation to ±4°
-  const rotateX = useTransform(y, [-0.5, 0.5], [4, -4])
-  const rotateY = useTransform(x, [-0.5, 0.5], [-4, 4])
-
-  function onMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (!ref.current) return
-    const r  = ref.current.getBoundingClientRect()
-    rawX.set((e.clientX - r.left) / r.width  - 0.5)
-    rawY.set((e.clientY - r.top)  / r.height - 0.5)
+  function onMove(e:React.MouseEvent<HTMLDivElement>) {
+    if (!el.current) return
+    const r = el.current.getBoundingClientRect()
+    mx.set((e.clientX - r.left) / r.width  - 0.5)
+    my.set((e.clientY - r.top)  / r.height - 0.5)
   }
-  function onLeave() { rawX.set(0); rawY.set(0) }
 
   return (
-    <div ref={ref} onMouseMove={onMove} onMouseLeave={onLeave}
-      className={className} style={{ perspective: 1200 }}>
-      <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}>
+    <div ref={el} onMouseMove={onMove} onMouseLeave={() => { mx.set(0); my.set(0) }}
+      className={className} style={{ perspective:1400 }}>
+      <motion.div style={{ rotateX:rx, rotateY:ry, transformStyle:"preserve-3d" }}>
         {children}
       </motion.div>
     </div>

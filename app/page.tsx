@@ -1,7 +1,7 @@
 import { Nav }              from "@/components/landing/Nav"
 import { Hero }             from "@/components/landing/Hero"
-import { Features }         from "@/components/landing/Features"
-import { PipelineSection }  from "@/components/landing/PipelineSection"
+import { LogoStrip }        from "@/components/landing/LogoStrip"
+import { FeaturesSection }  from "@/components/landing/FeaturesSection"
 import { AnalyticsSection } from "@/components/landing/AnalyticsSection"
 import { Testimonials }     from "@/components/landing/Testimonials"
 import { Pricing }          from "@/components/landing/Pricing"
@@ -12,11 +12,11 @@ import { Footer }           from "@/components/landing/Footer"
 export default function HomePage() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#0A0A0A] text-white"
-      style={{fontFamily:"'Inter','Segoe UI',system-ui,sans-serif"}}>
+      style={{ fontFamily: "'Inter','Segoe UI',system-ui,sans-serif" }}>
       <Nav />
       <Hero />
-      <Features />
-      <PipelineSection />
+      <LogoStrip />
+      <FeaturesSection />
       <AnalyticsSection />
       <Testimonials />
       <Pricing />
