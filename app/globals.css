@@ -1,49 +1,35 @@
 @import "tailwindcss";
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: #0A0A0A;
-  color: #fff;
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-}
-::selection { background: rgba(250,204,21,0.18); color: #fff; }
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#0A0A0A;color:#fff;font-family:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden}
+::selection{background:rgba(250,204,21,.18);color:#fff}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
 
-/* ─── Grid pattern ─── */
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-  background-size: 80px 80px;
-}
+/* Grid background */
+.grid-bg{
+  background-image:linear-gradient(rgba(255,255,255,.025)1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025)1px,transparent 1px);
+  background-size:72px 72px}
 
-/* ─── Glassmorphism ─── */
-.glass {
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.08);
-}
+/* Section alternating backgrounds */
+.bg-surface{background:#0D0D0D}
+.bg-base{background:#0A0A0A}
 
-/* ─── Drag cursor ─── */
-[data-rbd-drag-handle-draggable-id] { cursor: grab; }
-[data-rbd-drag-handle-draggable-id]:active { cursor: grabbing; }
+/* Drag */
+[data-rbd-drag-handle-draggable-id]{cursor:grab}
+[data-rbd-drag-handle-draggable-id]:active{cursor:grabbing}
 
-/* ─── Keyframes ─── */
-@keyframes float       { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
-@keyframes breathe     { 0%,100%{opacity:.35;transform:scale(1)} 50%{opacity:.65;transform:scale(1.2)} }
-@keyframes marquee     { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-@keyframes fade-in-up  { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-@keyframes slide-down  { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+/* Keyframes */
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes breathe{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:.6;transform:scale(1.2)}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes tab-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-.animate-float    { animation: float    5s ease-in-out infinite; }
-.animate-breathe  { animation: breathe  7s ease-in-out infinite; }
-.marquee          { animation: marquee 30s linear infinite; }
-.anim-fade-up     { animation: fade-in-up .6s ease both; }
-.anim-slide-down  { animation: slide-down .25s ease both; }
+.animate-float{animation:float 5s ease-in-out infinite}
+.animate-breathe{animation:breathe 7s ease-in-out infinite}
+.marquee{animation:marquee 32s linear infinite}
+.tab-in{animation:tab-in .35s ease both}
