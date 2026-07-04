@@ -1,28 +1,23 @@
-import { Nav }              from "@/components/landing/Nav"
-import { Hero }             from "@/components/landing/Hero"
-import { LogoStrip }        from "@/components/landing/LogoStrip"
-import { FeaturesSection }  from "@/components/landing/FeaturesSection"
-import { AnalyticsSection } from "@/components/landing/AnalyticsSection"
-import { Testimonials }     from "@/components/landing/Testimonials"
-import { Pricing }          from "@/components/landing/Pricing"
-import { FAQ }              from "@/components/landing/FAQ"
-import { CTASection }       from "@/components/landing/CTASection"
-import { Footer }           from "@/components/landing/Footer"
+import { SiteNav }                 from "@/components/layout/SiteNav"
+import { SiteFooter }              from "@/components/layout/SiteFooter"
+import { HomeHero }                from "@/components/home/HomeHero"
+import { HomeLogos }               from "@/components/home/HomeLogos"
+import { HomeFeatures }            from "@/components/home/HomeFeatures"
+import { HomeTestimonialsPreview } from "@/components/home/HomeTestimonialsPreview"
+import { HomePricingPreview }      from "@/components/home/HomePricingPreview"
+import { HomeCTA }                 from "@/components/home/HomeCTA"
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#0A0A0A] text-white"
-      style={{ fontFamily: "'Inter','Segoe UI',system-ui,sans-serif" }}>
-      <Nav />
-      <Hero />
-      <LogoStrip />
-      <FeaturesSection />
-      <AnalyticsSection />
-      <Testimonials />
-      <Pricing />
-      <FAQ />
-      <CTASection />
-      <Footer />
+    <main className="min-h-screen overflow-x-hidden bg-[#0A0A0A] text-white">
+      <SiteNav />
+      <HomeHero />
+      <HomeLogos />
+      <HomeFeatures />
+      <HomeTestimonialsPreview />
+      <HomePricingPreview />
+      <HomeCTA />
+      <SiteFooter />
     </main>
   )
 }
