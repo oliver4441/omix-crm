@@ -3,6 +3,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Plus } from "lucide-react"
 import { Container } from "@/components/ui/Container"
+import { SectionLabel } from "@/components/ui/SectionLabel"
 
 const E=[0.16,1,0.3,1] as const
 const FAQS=[
@@ -19,7 +20,7 @@ export function FAQ(){
       <Container>
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-[340px_1fr] lg:gap-16">
           <motion.div initial={{opacity:0,y:16}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:.6,ease:E}}>
-            <p className="text-[12px] font-bold uppercase tracking-[.18em] text-[#FACC15]">FAQ</p>
+            <SectionLabel>FAQ</SectionLabel>
             <h2 className="mt-4 text-[clamp(1.7rem,3.5vw,2.5rem)] font-extrabold leading-[1.1] tracking-[-0.04em] text-white">
               Questions, answered
             </h2>
@@ -30,7 +31,9 @@ export function FAQ(){
               return(
                 <div key={f.q}>
                   <button type="button" onClick={()=>setOpen(isOpen?null:i)}
-                    className="flex w-full items-center justify-between gap-8 py-6 text-left">
+                    className="flex w-full items-center justify-between gap-8 py-6 text-left"
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-answer-${i}`}>
                     <span className={`text-[16px] font-semibold transition-colors ${isOpen?"text-white":"text-[#A3A3A3]"}`}>{f.q}</span>
                     <motion.span animate={{rotate:isOpen?45:0}} transition={{duration:.2}}
                       className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition-all ${isOpen?"border-[#FACC15]/25 bg-[#FACC15]/[.08] text-[#FACC15]":"border-white/[.08] text-[#525252]"}`}>
@@ -39,7 +42,7 @@ export function FAQ(){
                   </button>
                   <AnimatePresence initial={false}>
                     {isOpen&&(
-                      <motion.div initial={{height:0,opacity:0}} animate={{height:"auto",opacity:1}} exit={{height:0,opacity:0}}
+                      <motion.div id={`faq-answer-${i}`} initial={{height:0,opacity:0}} animate={{height:"auto",opacity:1}} exit={{height:0,opacity:0}}
                         transition={{duration:.22,ease:E}} className="overflow-hidden">
                         <p className="pb-6 text-[16px] leading-[1.75] text-[#525252]">{f.a}</p>
                       </motion.div>

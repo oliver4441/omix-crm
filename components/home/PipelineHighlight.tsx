@@ -3,6 +3,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { CheckCircle, ArrowRight } from "lucide-react"
 import { Container } from "@/components/ui/Container"
+import { SectionLabel } from "@/components/ui/SectionLabel"
 
 const E=[0.16,1,0.3,1] as const
 const POINTS=["Drag-and-drop between any stage","Real-time sync across your team","Custom stages per workflow"]
@@ -47,7 +48,7 @@ export function PipelineHighlight(){
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <motion.div initial={{opacity:0,x:-28}} whileInView={{opacity:1,x:0}} viewport={{once:true}}
             transition={{duration:.65,ease:E}}>
-            <p className="text-[12px] font-bold uppercase tracking-[.18em] text-[#FACC15]">Pipeline</p>
+            <SectionLabel>Pipeline</SectionLabel>
             <h2 className="mt-4 text-[clamp(1.8rem,3.5vw,2.75rem)] font-extrabold leading-[1.1] tracking-[-0.04em] text-white">
               Move deals forward with one drag
             </h2>

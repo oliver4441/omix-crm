@@ -3,6 +3,7 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { LayoutDashboard, Users, KanbanSquare, TrendingUp, Search, Bell, CheckCircle, Clock } from "lucide-react"
 import { Container } from "@/components/ui/Container"
+import { SectionLabel } from "@/components/ui/SectionLabel"
 
 const E=[0.16,1,0.3,1] as const
 
@@ -193,7 +194,7 @@ export function ProductShowcase(){
       <Container>
         <motion.div initial={{opacity:0,y:16}} whileInView={{opacity:1,y:0}} viewport={{once:true}}
           transition={{duration:.6,ease:E}} className="mb-10 text-center sm:mb-12">
-          <p className="text-[12px] font-bold uppercase tracking-[.18em] text-[#FACC15]">Product</p>
+          <SectionLabel>Product</SectionLabel>
           <h2 className="mt-4 text-[clamp(1.9rem,4vw,3rem)] font-extrabold leading-[1.1] tracking-[-0.04em] text-white">
             See Omix CRM in action
           </h2>

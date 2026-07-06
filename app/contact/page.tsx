@@ -136,7 +136,7 @@ export default function ContactPage() {
                         <input id={f.k} type={f.type} placeholder={f.ph} required={f.req}
                           value={form[f.k as keyof typeof form]}
                           onChange={ev=>update(f.k,ev.target.value)}
-                          className="w-full rounded-[12px] border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-[15px] text-white placeholder-[#404040] outline-none transition-all focus:border-[#FACC15]/30 focus:bg-white/[0.06]"/>
+                          className="input-glass !pl-4"/>
                       </div>
                     ))}
                     <div>
@@ -145,7 +145,7 @@ export default function ContactPage() {
                       </label>
                       <textarea id="message" rows={4} required placeholder="Tell us about your team and what you're looking for…"
                         value={form.message} onChange={ev=>update("message",ev.target.value)}
-                        className="w-full resize-none rounded-[12px] border border-white/[0.08] bg-white/[0.04] px-4 py-3 text-[15px] text-white placeholder-[#404040] outline-none transition-all focus:border-[#FACC15]/30 focus:bg-white/[0.06]"/>
+                        className="input-glass !pl-4 resize-none min-h-[120px]"/>
                     </div>
                     <button type="submit" disabled={busy}
                       className="flex w-full items-center justify-center gap-2 rounded-[12px] bg-[#FACC15] py-3.5 text-[15px] font-bold text-black shadow-lg shadow-[#FACC15]/20 transition-all hover:bg-[#FDE68A] disabled:opacity-60">

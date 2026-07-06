@@ -2,6 +2,7 @@
 import { motion } from "framer-motion"
 import { Star } from "lucide-react"
 import { Container } from "@/components/ui/Container"
+import { SectionLabel } from "@/components/ui/SectionLabel"
 
 const E=[0.16,1,0.3,1] as const
 const s={hidden:{},show:{transition:{staggerChildren:.09}}}
@@ -19,7 +20,7 @@ export function Testimonials(){
       <Container>
         <motion.div initial={{opacity:0,y:16}} whileInView={{opacity:1,y:0}} viewport={{once:true}}
           transition={{duration:.6,ease:E}} className="mb-12 text-center sm:mb-14">
-          <p className="text-[12px] font-bold uppercase tracking-[.18em] text-[#FACC15]">Customers</p>
+          <SectionLabel>Customers</SectionLabel>
           <h2 className="mt-4 text-[clamp(1.9rem,4vw,3rem)] font-extrabold leading-[1.1] tracking-[-0.04em] text-white">
             Trusted by teams across Kenya
           </h2>
