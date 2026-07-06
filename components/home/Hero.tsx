@@ -88,7 +88,7 @@ export function Hero(){
       <div className="animate-breathe pointer-events-none absolute left-1/2 top-[-60px] h-[420px] w-[420px] -translate-x-1/2"
         style={{background:"radial-gradient(circle,rgba(250,204,21,.11) 0%,transparent 70%)"}}/>
 
-      <div className="relative z-10 mx-auto w-full max-w-[1200px] px-6 sm:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-[1280px] px-5 sm:px-8">
         <div className="flex flex-col items-center text-center">
           {/* Badge */}
           <motion.span initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}}
